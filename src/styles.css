@@ -2,3 +2,26 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+/* Defines the width and height of the scrollbar, corresponding to the size of the vertical and horizontal scrollbars */
+::-webkit-scrollbar {
+  width: 6px; /* Width of the vertical scrollbar */
+  height: 8px;/* Height of the horizontal scrollbar */
+}
+
+/* The track of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #F5ECD7;
+  border-radius: 2px;
+}
+
+/* The handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #c2baa6;
+  border-radius: 4px;
+}
+
+/* Hover effect for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

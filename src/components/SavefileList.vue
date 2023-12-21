@@ -228,16 +228,16 @@ onBeforeUnmount(() => {
 .middle {
     margin-top: 2%;
     margin-left: 3%;
-    width: 80%;
+    width: 80vw;
     height: 90%;
-    .form-container {  
+    .form-container {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: #ebe2cd;
-    border-radius: 10px;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
         .form-item {
         margin: 5px;
