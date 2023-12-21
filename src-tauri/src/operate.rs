@@ -1,4 +1,4 @@
-use std::{path::PathBuf, fs::{File, remove_file}, io::{Read, Write}};
+use std::{path::PathBuf, fs::{File, remove_file, read_dir, remove_dir}, io::{Read, Write}};
 
 use tauri::command;
 
@@ -18,10 +18,30 @@ pub fn replace_savefile(replaced_item: String, replace_item: String) -> Result<S
 
 #[command(rename_all = "snake_case")]
 pub fn delete_savefile(delete_item: String) -> Result<String, String> {
-    let delete_path = PathBuf::from(&delete_item);
-    match remove_file(delete_path) {
-        Ok(_) => Ok("success".to_string()),
-        Err(err) => Err(err.to_string()),
+    let mut delete_path = PathBuf::from(&delete_item);
+    let _ = match remove_file(&delete_path) {
+        Ok(_) => "success".to_string(),
+        Err(err) => return Err(err.to_string()),
+    };
+    if delete_item.contains("Stellaris") {
+        delete_path.pop();
+        match read_dir(&delete_path) {
+            Ok(entries) => {
+                if entries.count() == 0 {
+                    match remove_dir(&delete_path) {
+                        Ok(_) => Ok("success".to_string()),
+                        Err(err) => Err(err.to_string()),
+                    }
+                }
+                else {
+                    Ok("success".to_string())
+                }
+            },
+            Err(err) => Err(err.to_string()),
+        }
+    }
+    else {
+        Ok("succes".to_string())
     }
 }
 

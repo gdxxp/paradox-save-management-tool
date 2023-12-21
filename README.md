@@ -1,3 +1,12 @@
+# Preview
+
+Selection interface:   
+Select the game whose save files need to manage.
+![selection](./public/preview/selection.png)
+Management interface:   
+You can select the save files you wish to monitor, then click the Start button. When those save files change, the tool will automatically generate backup saves; the backups are indicated in green.
+![savefiles](./public/preview/savefiles.png)
+
 # Tauri + Vue 3 + TypeScript
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
