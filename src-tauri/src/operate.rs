@@ -19,30 +19,29 @@ pub fn replace_savefile(replaced_item: String, replace_item: String) -> Result<S
 #[command(rename_all = "snake_case")]
 pub fn delete_savefile(delete_item: String) -> Result<String, String> {
     let mut delete_path = PathBuf::from(&delete_item);
-    let _ = match remove_file(&delete_path) {
-        Ok(_) => "success".to_string(),
-        Err(err) => return Err(err.to_string()),
+    return match remove_file(&delete_path) {
+        Ok(_) => {
+            if delete_item.contains("Stellaris") {
+                delete_path.pop();
+                match read_dir(&delete_path) {
+                    Ok(entries) => {
+                        if entries.count() == 0 {
+                            match remove_dir(&delete_path) {
+                                Ok(_) => Ok("success".to_string()),
+                                Err(err) => Err(err.to_string()),
+                            }
+                        } else {
+                            Ok("success".to_string())
+                        }
+                    },
+                    Err(err) => Err(err.to_string()),
+                }
+            } else {
+                Ok("success".to_string())
+            }
+        },
+        Err(err) => Err(err.to_string()),
     };
-    if delete_item.contains("Stellaris") {
-        delete_path.pop();
-        match read_dir(&delete_path) {
-            Ok(entries) => {
-                if entries.count() == 0 {
-                    match remove_dir(&delete_path) {
-                        Ok(_) => Ok("success".to_string()),
-                        Err(err) => Err(err.to_string()),
-                    }
-                }
-                else {
-                    Ok("success".to_string())
-                }
-            },
-            Err(err) => Err(err.to_string()),
-        }
-    }
-    else {
-        Ok("succes".to_string())
-    }
 }
 
 #[command(rename_all = "snake_case")]
@@ -50,11 +49,10 @@ pub fn back_up_savefile(back_up_item: String) -> Result<String, String> {
     let original_path = PathBuf::from(&back_up_item);
     let mut backup_file = Vec::new();
     let mut backup_path = PathBuf::from(&back_up_item);
-    backup_path.pop();
-    if back_up_item.contains("Stellaris") {
-        backup_path.pop();
-        print!("yes");
-    }
+    backup_path = backup_path.components()
+        .take_while(|component| component.as_os_str() != "save games")
+        .collect::<PathBuf>();
+    backup_path.push("save games");
     backup_path.push("Backups");
     create_backup_filename(&mut backup_path, &original_path.file_name().unwrap().to_string_lossy().to_string(), 1);
     File::open(original_path).map_err(|err| err.to_string())?
